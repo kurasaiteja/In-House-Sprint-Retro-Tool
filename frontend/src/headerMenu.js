@@ -13,6 +13,10 @@ import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ShareIcon from '@material-ui/icons/Share';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -55,10 +59,21 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('md')]: {
             display: 'none',
         },
+    select: {
+        '&:before': {
+            borderColor: '#fff',
+        },
+        '&:after': {
+            borderColor: 'white',
+        }
+    },
+    icon: {
+        fill: 'white'
+    },
     },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({onChange,sorted}) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -93,17 +108,25 @@ export default function PrimarySearchAppBar() {
         setOpen(true);        
         };
     const exporttoPDF = event => {
-        const input = document.getElementById('root');
-        html2canvas(input)
-            .then((canvas) => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF({ orientation: 'landscape', });
-                const imgProps = pdf.getImageProperties(imgData);
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save('download.pdf');
-            });
+        
+        const len = 1; //$x(".//body/div/div").length
+    const pdf = new jsPDF('p', 'mm','a4');
+    const position = 0;
+    //Hide
+    for (let i = 1;i  <= len; i++){
+        html2canvas(document.getElementById('cards'),
+            {dpi: 300, // Set to 300 DPI
+            scale: 2 // Adjusts your resolution
+            }).then(canvas => {
+            pdf.addImage(canvas.toDataURL("images/png", 1), 'PNG', 0,position, 210, 295);
+
+            if (i == len){
+                pdf.save('sample-file.pdf');
+            }else{
+                pdf.addPage();
+            }
+        });
+     }
     }
 
 
@@ -165,6 +188,22 @@ export default function PrimarySearchAppBar() {
                     <Typography className={classes.title} variant="h5" noWrap>
                         Sprint Retro
                      </Typography>
+                     <div style={{marginLeft:'30px'}}>
+                     <FormControl variant="filled" color="inherit" style={{width:'20em'}}>
+                        <InputLabel id="filled-age-native-simple'">Sort by</InputLabel>
+                        <Select 
+                          onChange={onChange}
+                          value={sorted}
+                          style={{backgroundColor:"white"}}
+                          labelId="filled-age-native-simple'"
+                          id="filled-age-native-simple'"
+                          label="Sort by"
+                        >
+                          <MenuItem value={"date"}>CreatedDate</MenuItem>
+                          <MenuItem value={"votes"}>Votes</MenuItem>
+                        </Select>
+                      </FormControl>
+                      </div>
                     
                     <div className={classes.grow} />
 

@@ -141,7 +141,7 @@ var EPFCard = createReactClass({
       console.log(this.props.voted)
       const title = (<h3>{this.props.title}</h3>);
       let span;
-      if(this.state.uname!='Anonymous'){
+      if(this.props.anon==false){
         span=<span style={styles.createdby}>{this.state.uname}</span>
       }
       else{
@@ -155,6 +155,7 @@ var EPFCard = createReactClass({
             <CardContent style={styles.text}>{title}</CardContent>
                 <CardActions disableSpacing>
                   <IconButton
+                    disabled={this.props.disable}
                     tooltip="Edit Card"
                     onClick={this.openEdit}
                     style={{float: 'left'}}
@@ -162,6 +163,7 @@ var EPFCard = createReactClass({
                     <EditIcon  />
                   </IconButton>
                   <IconButton
+                    disabled={this.props.disable}
                     onClick={this.onDelete}
                     tooltip="Delete Card"
                     

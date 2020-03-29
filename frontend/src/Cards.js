@@ -1,12 +1,32 @@
 import axios from 'axios';
 import React from 'react';
 import EPFCard from './card.js';
-
+import HeaderBar from './headerMenu.js';
 var createReactClass = require('create-react-class');
-
 var Cards = createReactClass({
+  sortByNum: function(a, b, order = 'descending') {
+    const diff = a.votes - b.votes;
+
+    if (order === 'ascending') {
+        return diff;
+    }
+
+    return -1 * diff;
+  },
+
+  sortByCreatedDate: function(a, b, order = 'descending') {
+    const diff = a.timeStamp < b.timeStamp ? -1 : 1
+
+    if (order === 'ascending') {
+        return diff;
+    }
+
+    return -1 * diff;
+  },
+
   getInitialState: function() {
-    return {cardsData: []};
+    return {cardsData: [],
+            };
   },
     loadCardsFromServer: function() {
     var url = ("http://localhost:3001/api/cards/?columnid=" + this.props.cardColumn + "&boardid=" + this.props.boardId);
@@ -28,13 +48,28 @@ var Cards = createReactClass({
     setInterval(this.loadCardsFromServer, 1000);
   },
   render: function () {
+    var sort=this.props.sorted;
+    if(sort.length>0){
+    if(sort==="date"){
+    this.state.cardsData.sort(this.sortByCreatedDate)
+    }
+    else if(sort==="votes"){
+      this.state.cardsData.sort(this.sortByNum)
+    }
+  }
     var showVotes = this.props.showVotes
     var name=this.props.username
     let voted=false;
-      let iconColor="";
+    let iconColor="";
+    let disable;
       if(name.length>0){
     var cardMap = this.state.cardsData.map(function(card) {
-      
+      if(card.createdby===name){
+        disable=false
+      }
+      else{
+        disable = true
+      }
       if(card.votearray!=null || card.votearray!=undefined){
        voted= Object.values(card.votearray).includes(name);
        console.log(voted)
@@ -42,7 +77,7 @@ var Cards = createReactClass({
       else{
         voted=false
       }
-      if(voted==true){
+      if(voted===true){
         iconColor="#ffb400"
       }
       else{
@@ -61,6 +96,8 @@ var Cards = createReactClass({
                   createdby={card.createdby}
                   username={name}
                   iconColor={iconColor}
+                  disable={disable}
+                  anon={card.anon}
                   />);
     });
   }

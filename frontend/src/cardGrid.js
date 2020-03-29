@@ -4,7 +4,7 @@ import Switch from '@material-ui/core/Switch';
 import Cards from './Cards.js';
 import 'typeface-roboto';
 import Typography from '@material-ui/core/Typography';
-import HeaderBar from './headerMenu.js';
+import PrimarySearchAppBar from './headerMenu.js';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -25,7 +25,7 @@ const styles = {
     display: 'flex',
     width: '100%',
     minHeight: 'calc(100vh - 100px)',
-    backgroundColor: '#f3f3f3'
+    backgroundColor: '#f3f3f3',
   },
   divLeft: {
     marginTop:'5%',
@@ -53,6 +53,8 @@ var CardGrid = createReactClass({
         showVotes: true,
         showDialog: true,
         username: '',
+        sorted:''
+
       };
     },
     close: function() {
@@ -61,13 +63,21 @@ var CardGrid = createReactClass({
     open() {
         this.setState({ showDialog: true });
       },
+
      _handleUserNameChange: function(e) {
          this.setState({
           username: e.target.value
         });
+      },
+
+      _handlesortChange: function(e) {
+         this.setState({
+          sorted: e.target.value
+        });
+        },
         
 
-    },
+    
     handleSubmit: function() {
       if(this.state.username.length >0 ){
     this.close()
@@ -77,7 +87,7 @@ var CardGrid = createReactClass({
   render: function() {
     return (
       <div>
-      <HeaderBar />
+      <PrimarySearchAppBar onChange={this._handlesortChange} sorted={this.state.sorted}  />
        <Typography>
        <Dialog open={this.state.showDialog} aria-labelledby="form-dialog-title">
                   <DialogTitle id="form-dialog-title">Enter Your name</DialogTitle>
@@ -97,11 +107,12 @@ var CardGrid = createReactClass({
                     </Button>
                   </DialogActions>
        </Dialog>
-        <div style={styles.divWrap}>
+        <div style={styles.divWrap} id="cards">
           <div style={styles.divLeft}>
             <center><h2 style={{color:'#555'}}>Went well</h2></center>
               <br />
               <Cards
+                     sorted={this.state.sorted}
                      username={this.state.username}
                      cardColumn={1}
                      boardId={this.props.params.id}
@@ -116,6 +127,7 @@ var CardGrid = createReactClass({
             <h2 style={{color:'#555'}}><center>To Improve</center></h2>
               <br />
               <Cards 
+                     sorted={this.state.sorted}
                      username={this.state.username}
                      cardColumn={2}
                      boardId={this.props.params.id}
@@ -129,7 +141,9 @@ var CardGrid = createReactClass({
           <div style={styles.divLeft}>
             <h2 style={{color:'#555'}}><center>Action Items</center></h2>
               <br />
-              <Cards username={this.state.username}
+              <Cards 
+                     sorted={this.state.sorted}
+                     username={this.state.username}
                      cardColumn={3}
                      boardId={this.props.params.id}
                      showVotes={this.state.showVotes}

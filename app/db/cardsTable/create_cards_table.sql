@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS cards (
                 boardid int,
                 columnid int,
                 createdby text,
+                anon boolean,
                 timestamp timestamptz default current_timestamp);

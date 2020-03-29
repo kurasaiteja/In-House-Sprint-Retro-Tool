@@ -23,6 +23,7 @@
     "react-router-dom": "^5.1.2",
     "react-tap-event-plugin": "^3.0.3",
     "redux": "^4.0.5",
+    "semantic-ui-react": "^0.88.2",
     "typeface-roboto": "0.0.75"
   },
   "scripts": {

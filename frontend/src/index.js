@@ -7,10 +7,6 @@ import CardGrid from './cardGrid.js';
 import BoardGrid from './boardGrid.js';
 import './index.css';
 
-import {Provider} from 'react-redux';
-
-import store from './config/store';
-
 var createReactClass = require('create-react-class');
 var MainPage = createReactClass({
   render: function() {

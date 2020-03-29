@@ -33,13 +33,18 @@ var NewCardForm = createReactClass({
     });
   },
   handleSubmit: function() {
+    let anon=false;
+    if(this.state.username=='Anonymous'){
+        anon=true;
+    }
+    console.log(anon)
     var newCard
     if (this.props.editCard) {
       newCard = { id: this.props.cardId,
-          title: this.state.title, columnid: this.props.cardColumn, createdby: this.state.username};
+          title: this.state.title, columnid: this.props.cardColumn, createdby: this.props.username, anon:anon};
     } else{
       newCard = { boardid: this.props.boardId, title: this.state.title,
-                  columnid: this.props.cardColumn, votes: 0, createdby: this.state.username };
+                  columnid: this.props.cardColumn, votes: 0, createdby: this.props.username, anon:anon };
     }
     this.serverRequest =
       axios

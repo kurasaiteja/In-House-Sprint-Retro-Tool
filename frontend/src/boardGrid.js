@@ -1,7 +1,6 @@
 import React from 'react';
 import CreateBoardButton from './createBoardButton.js';
 import Boards from './boards.js';
-import UserProfile from './UserProfile';
 import HeaderBar from './headerMenu.js';
 const styles = {
   h3: {
@@ -27,7 +26,6 @@ var BoardGrid = createReactClass({
           <div styles={{ backgroundColor: '#f3f3f3' }}>
              <HeaderBar />  
               <h1 style={styles.h3}><center>My Boards</center></h1>
-              <h1 style={styles.h3}><center>{UserProfile.getName()}</center></h1>
         <div style={styles.boardDiv}>
           <Boards />
         </div>
